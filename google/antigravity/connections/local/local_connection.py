@@ -1616,10 +1616,15 @@ class LocalConnectionStrategy(connection.ConnectionStrategy):
       for host in ("localhost", "127.0.0.1"):
         ws_url = f"ws://{host}:{port}/"
         try:
+          # This socket is local to the harness subprocess managed by this
+          # strategy. Keepalive pings can time out while the harness is busy
+          # (for example, under memory pressure), closing a healthy connection.
+          # The subprocess/socket lifecycle already detects a stopped harness.
           ws = await websockets.connect(
               ws_url,
               additional_headers={"x-goog-api-key": api_key},
               max_size=None,
+              ping_interval=None,
           )
           return ws, ws_url
         except (OSError, websockets.WebSocketException) as e:

@@ -4294,11 +4294,13 @@ class LocalConnectionStrategyConnectTest(unittest.IsolatedAsyncioTestCase):
             "ws://localhost:8080/",
             additional_headers={"x-goog-api-key": "fake-key"},
             max_size=None,
+            ping_interval=None,
         ),
         mock.call(
             "ws://127.0.0.1:8080/",
             additional_headers={"x-goog-api-key": "fake-key"},
             max_size=None,
+            ping_interval=None,
         ),
     ])
 
